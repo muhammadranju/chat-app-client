@@ -7,12 +7,17 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    // host: "10.10.7.101", // your real LAN IP
     port: 3000,
   },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  css: {
+    transformer: "postcss", // ⬅️ disable lightningcss
+  },
+  build: {
+    cssMinify: "esbuild", // ⬅️ ensure esbuild handles minification
   },
 });
