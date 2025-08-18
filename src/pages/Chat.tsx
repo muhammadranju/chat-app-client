@@ -94,7 +94,7 @@ const Chat = () => {
         setReceiver(userRes.data as Receiver);
       } catch (err) {
         console.error("Error fetching data:", err);
-        setReceiver({ username: "Unknown User" });
+        // setReceiver({ username: "Unknown User" });
       }
     };
 
