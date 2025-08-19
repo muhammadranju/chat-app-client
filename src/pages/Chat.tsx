@@ -50,8 +50,6 @@ const Chat = () => {
     if (Notification.permission === "default") Notification.requestPermission();
   }, []);
 
-  console.log(messages);
-
   useEffect(() => {
     if (!user) {
       navigate("/login");
