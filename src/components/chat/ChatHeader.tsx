@@ -19,7 +19,7 @@ const ChatHeader = ({
   setShowPopup,
 }: ChatHeaderProps) => {
   return (
-    <CardHeader className="">
+    <CardHeader className="border-b border-black">
       <div className="flex flex-row justify-between relative">
         <CardTitle className="flex">
           <span>Chat with {receiver?.username || "Offline"}</span>{" "}

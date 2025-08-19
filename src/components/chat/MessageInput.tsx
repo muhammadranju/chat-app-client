@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { MessageInputProps } from "@/types/types";
+import { RiSendPlaneFill } from "react-icons/ri";
 
 const MessageInput = ({
   message,
@@ -30,7 +31,9 @@ const MessageInput = ({
           }
         }}
       />
-      <Button onClick={sendMessage}>Send</Button>
+      <Button onClick={sendMessage} className="cursor-pointer">
+        Send <RiSendPlaneFill />
+      </Button>
     </div>
   );
 };
