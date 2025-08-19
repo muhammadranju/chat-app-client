@@ -18,7 +18,7 @@ const Signup = () => {
   useEffect(() => {
     if (localStorage.getItem("token")) {
       toast.error("You can't access this page while you are logged in");
-      navigate("/home");
+      navigate("/users");
     }
   });
 

@@ -8,19 +8,24 @@ import { LogInIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get desired route or fallback to /users
+  const from = location.state?.from?.pathname || "/users";
+  console.log(from);
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
       toast.error("You can't access this page while you are logged in");
       navigate("/home");
     }
-  });
+  }, [navigate]);
 
   const handleLogin = async () => {
     try {
@@ -31,7 +36,9 @@ const Login = () => {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
       toast.success("Login Successful");
-      navigate("/home"); // Changed to home for user selection
+
+      // ✅ Navigate to desired route
+      navigate(from, { replace: true });
     } catch (err) {
       toast.error("Login Failed");
       console.error(err);
