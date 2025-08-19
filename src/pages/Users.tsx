@@ -14,6 +14,8 @@ import { useNavigate } from "react-router";
 const Users = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 3; // Show 3 users per page
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,8 +38,16 @@ const Users = () => {
     user.username.toLowerCase().includes(search.toLowerCase())
   );
 
+  // Pagination logic
+  const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+  const startIndex = (currentPage - 1) * usersPerPage;
+  const paginatedUsers = filteredUsers.slice(
+    startIndex,
+    startIndex + usersPerPage
+  );
+
   return (
-    <div className="mt-16">
+    <div className="py-16">
       <Helmet>
         <title>Users - Chat App</title>
       </Helmet>
@@ -57,8 +67,11 @@ const Users = () => {
         <Input
           placeholder="Search users..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="flex-1  placeholder-black"
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setCurrentPage(1); // reset to first page when searching
+          }}
+          className="flex-1 placeholder-black"
         />
         <Button className="bg-black border-none cursor-pointer">
           <Search className="w-5 h-5" />
@@ -71,8 +84,8 @@ const Users = () => {
           <CardTitle>Available Users</CardTitle>
         </CardHeader>
         <CardContent>
-          {filteredUsers.length > 0 ? (
-            filteredUsers.map((user) => (
+          {paginatedUsers.length > 0 ? (
+            paginatedUsers.map((user) => (
               <div
                 key={user._id}
                 className="flex items-center justify-between p-3 mb-3 rounded-lg border hover:bg-gray-700/5 transition cursor-pointer"
@@ -87,7 +100,7 @@ const Users = () => {
                     <p className="text-gray-400 text-sm">Online</p>
                   </div>
                 </div>
-                <Button className=" border-none flex items-center gap-1 cursor-pointer">
+                <Button className="border-none flex items-center gap-1 cursor-pointer">
                   Chat Now <MessageCircle className="w-4 h-4" />
                 </Button>
               </div>
@@ -101,6 +114,31 @@ const Users = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Pagination */}
+      {filteredUsers.length > usersPerPage && (
+        <div className="max-w-sm mx-auto mt-6 flex justify-between items-center">
+          <Button
+            variant="outline"
+            className="bg-black text-white  cursor-pointer"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+          >
+            Prev
+          </Button>
+          <span className="text-gray-700 font-medium">
+            Page {currentPage} of {totalPages}
+          </span>
+          <Button
+            variant="outline"
+            className="bg-black text-white  cursor-pointer"
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+          >
+            Next
+          </Button>
+        </div>
+      )}
 
       {/* Stats Section */}
       <div className="max-w-4xl mx-auto mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
