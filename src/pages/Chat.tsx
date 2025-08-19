@@ -189,13 +189,14 @@ const Chat = () => {
       </Helmet>
       {/* LEFT: user list */}
       <div className="hidden md:flex flex-col w-1/3 lg:w-1/4 border-r bg-white">
-        <div className="p-3 font-semibold text-lg border-b flex ">
+        <div className="p-3 font-semibold text-lg border-b flex flex-col">
           <Link
             to="/users"
             className="text-foreground font-black hover:text-primary/90 flex items-center gap-2"
           >
             <Logo /> Chatify
           </Link>
+          <span className="text-xs ml-11 -mt-3">Hello! {user?.username}😉</span>
         </div>
         <div className="flex-1 overflow-y-auto">
           {users.map((u) => (
