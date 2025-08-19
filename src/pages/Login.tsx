@@ -1,9 +1,13 @@
+import Logo from "@/assets/Logo";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { BASE_URL } from "@/lib/base_url";
 import axios from "axios";
-import { useState } from "react";
+import { LogInIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 
 const Login = () => {
@@ -11,32 +15,39 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      toast.error("You can't access this page while you are logged in");
+      navigate("/home");
+    }
+  });
+
   const handleLogin = async () => {
     try {
-      const res = await axios.post(
-        `https://chat-app-server-8ec3.onrender.com/api/auth/login`,
-        {
-          username,
-          password,
-        }
-      );
+      const res = await axios.post(`${BASE_URL}/auth/login`, {
+        username,
+        password,
+      });
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
+      toast.success("Login Successful");
       navigate("/home"); // Changed to home for user selection
     } catch (err) {
+      toast.error("Login Failed");
       console.error(err);
     }
   };
 
   return (
-    <Card className="w-[350px] mx-auto mt-20">
+    <Card className="w-[380px] mx-auto mt-44">
       <Helmet>
         <title>Login - Chat App</title>
       </Helmet>
 
-      <CardHeader>
-        <CardTitle>Login</CardTitle>
-      </CardHeader>
+      <div className="flex items-center flex-col justify-center gap-2">
+        <Logo />
+        <CardTitle>Login to Chat App</CardTitle>
+      </div>
       <CardContent>
         <Input
           placeholder="Username"
@@ -56,8 +67,12 @@ const Login = () => {
             }
           }}
         />
-        <Button type="submit" onClick={handleLogin} className="mt-4 w-full">
-          Login
+        <Button
+          type="submit"
+          onClick={handleLogin}
+          className="mt-4 w-full cursor-pointer"
+        >
+          Login <LogInIcon />
         </Button>
       </CardContent>
     </Card>

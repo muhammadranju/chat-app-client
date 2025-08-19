@@ -1,9 +1,13 @@
+import Logo from "@/assets/Logo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { BASE_URL } from "@/lib/base_url";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
+import toast from "react-hot-toast";
+import { FaSignInAlt } from "react-icons/fa";
 import { useNavigate } from "react-router";
 
 const Signup = () => {
@@ -11,29 +15,36 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      toast.error("You can't access this page while you are logged in");
+      navigate("/home");
+    }
+  });
+
   const handleSignup = async () => {
     try {
-      await axios.post(
-        `https://chat-app-server-8ec3.onrender.com/api/auth/signup`,
-        {
-          username,
-          password,
-        }
-      );
+      await axios.post(`${BASE_URL}/auth/signup`, {
+        username,
+        password,
+      });
+      toast.success("Signup Successful");
       navigate("/login");
     } catch (err) {
+      toast.error("Signup Failed");
       console.error(err);
     }
   };
 
   return (
-    <Card className="w-[350px] mx-auto mt-20">
+    <Card className="w-[380px] mx-auto mt-44">
       <Helmet>
         <title>Signup - Chat App</title>
       </Helmet>
-      <CardHeader>
-        <CardTitle>Signup</CardTitle>
-      </CardHeader>
+      <div className="flex items-center flex-col justify-center gap-2">
+        <Logo />
+        <CardTitle>Signup to Chat App</CardTitle>
+      </div>
       <CardContent>
         <Input
           placeholder="Username"
@@ -53,8 +64,9 @@ const Signup = () => {
             }
           }}
         />
-        <Button onClick={handleSignup} className="mt-4 w-full">
+        <Button onClick={handleSignup} className="mt-4 w-full cursor-pointer">
           Signup
+          <FaSignInAlt />
         </Button>
       </CardContent>
     </Card>
