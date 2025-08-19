@@ -1,7 +1,6 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BASE_URL } from "@/lib/base_url";
 import type { User } from "@/types/types";
 import axios from "axios";
 import { useEffect, useState } from "react";
