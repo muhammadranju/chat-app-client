@@ -1,14 +1,18 @@
+import { io } from "socket.io-client";
+import Logo from "@/assets/Logo";
 import ChatHeader from "@/components/chat/ChatHeader";
 import MessageInput from "@/components/chat/MessageInput";
 import MessageList from "@/components/chat/MessageList";
 import TypingIndicator from "@/components/chat/TypingIndicator";
 import { nonfictionLogo } from "@/hooks/Logo";
+import { BASE_URL, SOCKET_BASE_URL } from "@/lib/base_url";
 import type { Message, Receiver, User } from "@/types/types";
 import axios from "axios";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useNavigate, useParams } from "react-router";
-import io from "socket.io-client";
+import toast from "react-hot-toast";
+import { Link, useNavigate, useParams } from "react-router";
+import ChatsListSkeleton from "@/components/chat/ChatsListSkeleton";
 
 const Chat = () => {
   const { userId } = useParams<{ userId: string }>();
@@ -35,10 +39,7 @@ const Chat = () => {
   const navigate = useNavigate();
   const [getMessage, setGetMessage] = useState(false);
 
-  const socket = useMemo(
-    () => io("https://chat-app-server-8ec3.onrender.com"),
-    []
-  );
+  const socket = useMemo(() => io(SOCKET_BASE_URL), []);
 
   useEffect(() => {
     if (getMessage)
@@ -60,41 +61,34 @@ const Chat = () => {
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
+      toast.error("You are not authorized to access this page");
       return;
     }
 
     const fetchData = async () => {
       try {
         // fetch all users
-        const usersRes = await axios.get(
-          `https://chat-app-server-8ec3.onrender.com/api/users`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const usersRes = await axios.get(`${BASE_URL}/users`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setUsers(usersRes.data);
 
         // fetch chat messages only if userId exists
         if (userId) {
           const [msgsRes, userRes] = await Promise.all([
-            axios.get(
-              `https://chat-app-server-8ec3.onrender.com/api/messages/${userId}`,
-              {
-                headers: { Authorization: `Bearer ${token}` },
-              }
-            ),
-            axios.get(
-              `https://chat-app-server-8ec3.onrender.com/api/users/${userId}`,
-              {
-                headers: { Authorization: `Bearer ${token}` },
-              }
-            ),
+            axios.get(`${BASE_URL}/messages/${userId}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }),
+            axios.get(`${BASE_URL}/users/${userId}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }),
           ]);
 
           setMessages(msgsRes.data);
           setReceiver(userRes.data);
         }
       } catch (err) {
+        toast.error("Error fetching data");
         console.error("Error fetching data:", err);
       }
     };
@@ -167,6 +161,7 @@ const Chat = () => {
       message,
       sender: { _id: user.id, username: user.username },
       receiver: { _id: userId, username: receiver?.username },
+      timestamp: new Date(),
     };
 
     socket.emit("chatMessage", { room, ...newMsg });
@@ -180,6 +175,7 @@ const Chat = () => {
 
       setMessage("");
     } catch (err) {
+      toast.error("Error sending message");
       console.error("Error sending message:", err);
     }
   };
@@ -193,7 +189,14 @@ const Chat = () => {
       </Helmet>
       {/* LEFT: user list */}
       <div className="hidden md:flex flex-col w-1/3 lg:w-1/4 border-r bg-white">
-        <div className="p-3 font-semibold text-lg border-b">Users</div>
+        <div className="p-3 font-semibold text-lg border-b flex ">
+          <Link
+            to="/users"
+            className="text-foreground font-black hover:text-primary/90 flex items-center gap-2"
+          >
+            <Logo /> Chatify
+          </Link>
+        </div>
         <div className="flex-1 overflow-y-auto">
           {users.map((u) => (
             <div
@@ -203,7 +206,7 @@ const Chat = () => {
                 u._id === userId ? "bg-gray-200" : ""
               }`}
             >
-              <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-white text-sm">
+              <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white text-sm">
                 {u.username.charAt(0).toUpperCase()}
               </div>
               <span className="truncate">{u.username}</span>
@@ -242,9 +245,16 @@ const Chat = () => {
             />
           </>
         ) : (
-          <div className="flex flex-1 items-center justify-center text-gray-500">
-            Select a user to start chatting
-          </div>
+          // <div className="flex flex-1 items-center justify-center text-gray-500">
+          //   Select a user to start chatting
+          // </div>
+          <>
+            <ChatsListSkeleton />
+            <ChatsListSkeleton />
+            <ChatsListSkeleton />
+            <ChatsListSkeleton />
+            <ChatsListSkeleton />
+          </>
         )}
       </div>
     </div>
