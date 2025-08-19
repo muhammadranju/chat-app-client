@@ -8,9 +8,6 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     port: 3000,
-    allowedHosts: [
-      "5104582c670d.ngrok-free.app", // ✅ allow ngrok tunnel
-    ],
   },
   resolve: {
     alias: {
