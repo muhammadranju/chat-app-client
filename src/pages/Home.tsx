@@ -1,15 +1,12 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
-import axios from "axios";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BASE_URL } from "@/lib/base_url";
-
-interface User {
-  _id: string;
-  username: string;
-}
+import type { User } from "@/types/types";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router";
 
 const Home = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -23,7 +20,7 @@ const Home = () => {
     }
 
     axios
-      .get(`${BASE_URL}/api/users`, {
+      .get(`${BASE_URL}/users`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setUsers(res.data))
@@ -32,6 +29,9 @@ const Home = () => {
 
   return (
     <Card className="w-[400px] mx-auto mt-20">
+      <Helmet>
+        <title>Home - Chat App</title>
+      </Helmet>
       <CardHeader>
         <CardTitle>Select a User to Chat</CardTitle>
       </CardHeader>
@@ -45,8 +45,8 @@ const Home = () => {
             <Avatar className="mr-2">
               <AvatarFallback>{user.username[0]}</AvatarFallback>
             </Avatar>
-            <span>{user.username}</span>
-            <Button className="ml-auto">Chat</Button>
+            <span>Chat with: {user.username}</span>
+            <Button className="ml-auto cursor-pointer">Chat Now</Button>
           </div>
         ))}
         {users.length === 0 && <p>No other users available. Invite friends!</p>}

@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { BASE_URL } from "@/lib/base_url";
+import axios from "axios";
+import { useState } from "react";
+import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -13,7 +14,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post(`${BASE_URL}/api/auth/login`, {
+      const res = await axios.post(`${BASE_URL}/auth/login`, {
         username,
         password,
       });
@@ -27,6 +28,10 @@ const Login = () => {
 
   return (
     <Card className="w-[350px] mx-auto mt-20">
+      <Helmet>
+        <title>Login - Chat App</title>
+      </Helmet>
+
       <CardHeader>
         <CardTitle>Login</CardTitle>
       </CardHeader>
@@ -42,11 +47,18 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="mt-2"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleLogin();
+            }
+          }}
         />
         <Button type="submit" onClick={handleLogin} className="mt-4 w-full">
           Login
         </Button>
       </CardContent>
+      
     </Card>
   );
 };

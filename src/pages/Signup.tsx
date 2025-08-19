@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { BASE_URL } from "@/lib/base_url";
+import axios from "axios";
+import { useState } from "react";
+import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router";
 
 const Signup = () => {
   const [username, setUsername] = useState("");
@@ -13,7 +14,7 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
-      await axios.post(`${BASE_URL}/api/auth/signup`, {
+      await axios.post(`${BASE_URL}/auth/signup`, {
         username,
         password,
       });
@@ -25,6 +26,9 @@ const Signup = () => {
 
   return (
     <Card className="w-[350px] mx-auto mt-20">
+      <Helmet>
+        <title>Signup - Chat App</title>
+      </Helmet>
       <CardHeader>
         <CardTitle>Signup</CardTitle>
       </CardHeader>
@@ -40,6 +44,12 @@ const Signup = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="mt-2"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSignup();
+            }
+          }}
         />
         <Button onClick={handleSignup} className="mt-4 w-full">
           Signup
