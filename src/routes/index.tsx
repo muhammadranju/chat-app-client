@@ -1,8 +1,11 @@
 import App from "@/App";
+import ChatLayout from "@/components/layout/ChatLayout";
+import About from "@/pages/About";
 import Chat from "@/pages/Chat";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
+import Users from "@/pages/Users";
 import { createBrowserRouter } from "react-router";
 
 export const router = createBrowserRouter([
@@ -22,6 +25,14 @@ export const router = createBrowserRouter([
         path: "/home",
       },
       {
+        Component: Users,
+        path: "/users",
+      },
+      {
+        Component: About,
+        path: "/about",
+      },
+      {
         Component: Login,
         path: "/login",
       },
@@ -30,9 +41,15 @@ export const router = createBrowserRouter([
         Component: Signup,
         path: "/signup",
       },
+    ],
+  },
+  {
+    Component: ChatLayout,
+    path: "chat",
+    children: [
       {
         Component: Chat,
-        path: "chat/:userId",
+        path: ":userId",
       },
     ],
   },
