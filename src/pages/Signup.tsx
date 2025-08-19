@@ -1,6 +1,6 @@
 import Logo from "@/assets/Logo";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { BASE_URL } from "@/lib/base_url";
 import axios from "axios";
