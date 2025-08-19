@@ -14,10 +14,13 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
-      await axios.post(`${BASE_URL}/auth/signup`, {
-        username,
-        password,
-      });
+      await axios.post(
+        `https://chat-app-server-8ec3.onrender.com/api/auth/signup`,
+        {
+          username,
+          password,
+        }
+      );
       navigate("/login");
     } catch (err) {
       console.error(err);

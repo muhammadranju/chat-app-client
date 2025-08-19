@@ -3,7 +3,6 @@ import MessageInput from "@/components/chat/MessageInput";
 import MessageList from "@/components/chat/MessageList";
 import TypingIndicator from "@/components/chat/TypingIndicator";
 import { nonfictionLogo } from "@/hooks/Logo";
-import { BASE_URL, SOCKET_BASE_URL } from "@/lib/base_url";
 import type { Message, Receiver, User } from "@/types/types";
 import axios from "axios";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -36,7 +35,10 @@ const Chat = () => {
   const navigate = useNavigate();
   const [getMessage, setGetMessage] = useState(false);
 
-  const socket = useMemo(() => io(SOCKET_BASE_URL), []);
+  const socket = useMemo(
+    () => io("https://chat-app-server-8ec3.onrender.com"),
+    []
+  );
 
   useEffect(() => {
     if (getMessage)
@@ -64,20 +66,29 @@ const Chat = () => {
     const fetchData = async () => {
       try {
         // fetch all users
-        const usersRes = await axios.get(`${BASE_URL}/users`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const usersRes = await axios.get(
+          `https://chat-app-server-8ec3.onrender.com/api/users`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setUsers(usersRes.data);
 
         // fetch chat messages only if userId exists
         if (userId) {
           const [msgsRes, userRes] = await Promise.all([
-            axios.get(`${BASE_URL}/messages/${userId}`, {
-              headers: { Authorization: `Bearer ${token}` },
-            }),
-            axios.get(`${BASE_URL}/users/${userId}`, {
-              headers: { Authorization: `Bearer ${token}` },
-            }),
+            axios.get(
+              `https://chat-app-server-8ec3.onrender.com/api/messages/${userId}`,
+              {
+                headers: { Authorization: `Bearer ${token}` },
+              }
+            ),
+            axios.get(
+              `https://chat-app-server-8ec3.onrender.com/api/users/${userId}`,
+              {
+                headers: { Authorization: `Bearer ${token}` },
+              }
+            ),
           ]);
 
           setMessages(msgsRes.data);

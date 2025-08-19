@@ -20,7 +20,7 @@ const Home = () => {
     }
 
     axios
-      .get(`${BASE_URL}/users`, {
+      .get(`https://chat-app-server-8ec3.onrender.com/api/users`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setUsers(res.data))

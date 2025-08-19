@@ -14,10 +14,13 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post(`${BASE_URL}/auth/login`, {
-        username,
-        password,
-      });
+      const res = await axios.post(
+        `https://chat-app-server-8ec3.onrender.com/api/auth/login`,
+        {
+          username,
+          password,
+        }
+      );
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
       navigate("/home"); // Changed to home for user selection
@@ -58,7 +61,6 @@ const Login = () => {
           Login
         </Button>
       </CardContent>
-      
     </Card>
   );
 };
