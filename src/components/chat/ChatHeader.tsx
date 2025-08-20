@@ -47,7 +47,7 @@ const ChatHeader = ({
                     key={idx}
                     className="px-4 py-2 hover:bg-gray-100 border-b text-sm"
                   >
-                    <strong>{n.username}</strong>: {n.message}
+                    {/* <strong>{n.username}</strong>: {n.message} */}
                   </div>
                 ))
               ) : (
