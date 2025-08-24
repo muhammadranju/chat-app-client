@@ -10,9 +10,9 @@ import type { Message, Receiver, User } from "@/types/types";
 import axios from "axios";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
-import toast from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router";
 import ChatsListSkeleton from "@/components/chat/ChatsListSkeleton";
+import { toast } from "sonner";
 
 const Chat = () => {
   const { userId } = useParams<{ userId: string }>();

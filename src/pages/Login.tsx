@@ -7,8 +7,8 @@ import axios from "axios";
 import { LogInIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router";
+import { toast } from "sonner";
 
 const Login = () => {
   const [username, setUsername] = useState("");

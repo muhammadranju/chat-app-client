@@ -6,9 +6,9 @@ import { BASE_URL } from "@/lib/base_url";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import toast from "react-hot-toast";
 import { FaSignInAlt } from "react-icons/fa";
 import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 const Signup = () => {
   const [username, setUsername] = useState("");

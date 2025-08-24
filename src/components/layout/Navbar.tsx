@@ -12,8 +12,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { LogInIcon } from "lucide-react";
-import toast from "react-hot-toast";
 import { Link, NavLink, useNavigate } from "react-router";
+import { toast } from "sonner";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
