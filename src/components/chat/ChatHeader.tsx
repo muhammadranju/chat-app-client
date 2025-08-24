@@ -42,7 +42,7 @@ const ChatHeader = ({
           {showPopup && (
             <div className="absolute right-0 mt-2 w-56 sm:w-64 bg-white shadow-lg rounded-lg border max-h-64 overflow-y-auto z-50">
               {notifications.length > 0 ? (
-                notifications.map((n, idx) => (
+                notifications.map((_n, idx) => (
                   <div
                     key={idx}
                     className="px-4 py-2 hover:bg-gray-100 border-b text-sm"
